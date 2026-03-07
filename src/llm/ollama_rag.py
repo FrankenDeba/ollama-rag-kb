@@ -2,7 +2,7 @@ from langchain_ollama import ChatOllama
 
 from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter as RCTS
 from langchain.tools import tool
 from langchain.agents import create_agent
@@ -69,7 +69,7 @@ def ask_ques(ques: str) -> str:
 
     from pathlib import Path
     script_location = Path(__file__).parent.absolute()
-    file_location = script_location / 'data' / 'attention.pdf'
+    file_location = script_location / 'data'
 
     retriever = create_retriever(path=file_location) if retriever_cache == {} else retriever_cache["retriever"]
 
@@ -131,9 +131,9 @@ def create_retriever(path):
     persist_directory="./chroma_ollama_db"
 )
 
-    file_src = path
+    dir = path
 
-    doc_loader = PyPDFLoader(file_src)
+    doc_loader =  DirectoryLoader(dir, glob="**/*.*")
     documents = doc_loader.load()
 
     splitter = RCTS(

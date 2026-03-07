@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from .query import ask_ques
+from .file_processor import process_uploaded_file
 
 app = FastAPI()
 
@@ -10,7 +11,14 @@ def health_check():
     }
 
 @app.post("/query")
-def get_ans(ques: str):
+async def get_ans(ques: str):
     return {
         "answer": ask_ques(ques=ques)
+    }
+
+@app.post("/upload")
+async def upload(file: UploadFile=File(...)):
+    await process_uploaded_file(file=file)
+    return {
+        "message": "File uploaded successfully!"
     }
