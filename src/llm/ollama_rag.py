@@ -91,7 +91,7 @@ def ask_ques(ques: str) -> str:
 
     ans = llm.invoke(prompt_msg)
 
-    return f"\n\nAnswer to your question:\n\n {ans.content}"
+    return f"\n\n {ans.content}"
 
 # while True:
 #     question = input("Please input your query: \n\n")
@@ -158,7 +158,17 @@ def create_retriever(path):
 
     return retriever
 
+def generate_mcq():
+    response = ask_ques(f"Generate 10 MCQ questions & their answers based on the given context: Context: {'attention.pdf file'}")
+
+    try:
+        with open("mcq_dump.txt", "w") as f:
+            f.write(response)
+    except IOError as err:
+        print(err)
 
 
-__all__ = ["ask_ques"]
+
+
+__all__ = ["ask_ques", "generate_mcq"]
 

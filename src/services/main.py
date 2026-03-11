@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
-from .query import ask_ques
+from .query import ask_ques, generate_mcq
 from .file_processor import process_uploaded_file
 
 app = FastAPI()
@@ -21,4 +21,11 @@ async def upload(file: UploadFile=File(...)):
     await process_uploaded_file(file=file)
     return {
         "message": "File uploaded successfully!"
+    }
+
+@app.post("/mcq")
+async def gen_mcq():
+    generate_mcq()
+    return {
+        "message": "OK"
     }
